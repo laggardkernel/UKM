@@ -15,13 +15,15 @@ cat << CTAG
 			$BB echo ','
 			. $UKM/config.json.generate.status
 			$BB echo ','
-			. $UKM/config.json.generate.cpu
+			. $UKM/config.json.generate.kyro1
+			$BB echo ','
+			. $UKM/config.json.generate.kyro2
+			$BB echo ','
+			. $UKM/config.json.generate.cpuboost
 			$BB echo ','
 			. $UKM/config.json.generate.hotplug
 			$BB echo ','
 			. $UKM/config.json.generate.thermal
-			$BB echo ','
-			. $UKM/config.json.generate.cpuvolt
 			$BB echo ','
 			. $UKM/config.json.generate.io
 			$BB echo ','

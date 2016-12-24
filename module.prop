@@ -1,9 +1,9 @@
 id=ukm
 name=Universal Kernel Manager
-version=v3.8.1
-versionCode=381
-author=apb_axel
-description=Universal Kernel Manager, combination of Synapse and script support by apb_axel, Magisk module by laggardkernel
-support=http://forum.xda-developers.com/android/software/zip-synapse-script-universal-kernel-t2736986
+version=v1
+versionCode=100
+author=apb_axel & yarpiin
+description=Universal Kernel Manager for OnePlus 3 by yarpiin, Magisk module by laggardkernel
+support=http://forum.xda-developers.com/oneplus-3/themes/ukm-op3-install-synapse-tune-kernel-t3524761
 donate=https://play.google.com/store/apps/details?id=com.af.synapse
 cacheModule=false

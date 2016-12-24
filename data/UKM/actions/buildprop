@@ -7,7 +7,7 @@ if [[ ! -z "$2" ]]; then
 			if [ $1 == "dalvik.vm.heapsize" ]; then
 				VMHS="$2";
 				VMHS="$((VMHS))m";
-				
+
 				setprop $1 $VMHS;
 			else
 				setprop $1 "$2";

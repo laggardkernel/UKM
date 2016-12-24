@@ -51,9 +51,9 @@ PROPFILE=false
 buildname="custom_build.prop"
 tweakname="tweak.prop"
 
-VERSION="v3.8.1"
+VERSION="v1"
 REVISION="0.1"
-AUTHOR="apb_axel"
+AUTHOR="yarpiin"
 APKNAME=Synapse.apk
 PACKAGENAME=com.af.synapse
 
@@ -67,7 +67,7 @@ REMOVAL=""
 
 print_modname() {
   ui_print "*******************************"
-  ui_print "    Universal Kernel Manager   "
+  ui_print " Universal Kernel Manager OP3  "
   ui_print " "
   ui_print "             $VERSION"
   ui_print " "

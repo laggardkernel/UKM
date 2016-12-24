@@ -96,36 +96,4 @@ case $1 in
 			$BB echo $(coreread $2);
 		fi;
 	;;
-	corevolt)
-		P=/sys/devices/virtual/misc/customvoltage/core_voltages;
-		
-		if [ -f $P ]; then
-			if [[ ! -z $3 ]]; then
-				corewrite $2 $3;
-			fi;
-			
-			$BB echo `coreread $2`;
-		fi;
-	;;
-	ivavolt)
-		P=/sys/devices/virtual/misc/customvoltage/iva_voltages;
-		
-		if [ -f $P ]; then
-			if [[ ! -z $3 ]]; then
-				corewrite $2 $3;
-			fi;
-			
-			$BB echo `coreread $2`;
-		fi;
-	;;
-	regulatorvolt)
-		P=/sys/devices/virtual/misc/customvoltage/regulator_voltages;
-		
-		if [ -f $P ]; then
-			if [[ ! -z $3 ]]; then
-				cpuwrite $2 $3;
-			fi;
-			$BB echo `cpuread $2`;
-		fi;
-	;;
 esac;

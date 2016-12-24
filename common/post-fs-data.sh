@@ -88,32 +88,23 @@ fi
 # Add Synapse support
 # **************************************************************
 
-# Delete known files that re-create uci config
-if [ -e "/data/ak/ak-post-boot.sh" ]; then
-  $BB rm -f /data/ak/ak-post-boot.sh #ak
-  $BB rm -f /sbin/post-init.sh #neobuddy89
-fi
-
 # Delete default uci config in case kernel has one already to avoid duplicates.
 if [ -e "/sbin/uci" ]; then
   $BB rm -f /sbin/uci
 fi
 
-# Delete all debug files so it can be re-created on boot.
-$BB rm -f $DEBUG/*
+# Set SElinux to permisive on boot
+log_print "Setting SELinux permissive"
+$BB echo "0" >/sys/fs/selinux/enforce
 
 # Reset profiles to default
-$BB echo "Custom" > $UKM/files/gamma_prof
 $BB echo "Custom" > $UKM/files/lmk_prof
-$BB echo "Custom" > $UKM/files/sound_prof
-$BB echo "Custom" > $UKM/files/speaker_prof
 $BB echo "0" > $UKM/files/volt_prof;
 $BB echo "0" > $UKM/files/dropcaches_prof;
 
-# Reset uci config so it can be re-created on boot.
-log_print "Restart uic"
-$UCI_XBIN reset;
-$BB sleep 1;
-$UCI_XBIN;
-log_print "Set SELinux permissive"
-setenforce 0
+# # Reset uci config so it can be re-created on boot.
+# log_print "Restart uci"
+# $UCI_XBIN reset;
+# $BB sleep 1;
+# $UCI_XBIN;
+

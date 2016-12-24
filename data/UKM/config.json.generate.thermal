@@ -108,50 +108,6 @@ cat << CTAG
 						action:"generic '$MSMTHERMAL'/parameters/core_limit_temp_degC"
 					}},'
 				fi
-				if [ -f "$MSMTHERMAL/parameters/freq_control_mask" ]; then
-					$BB echo '{ SDescription:{
-						description:"Frequency Throttling Cores:"
-					}},
-					{ SDescription:{
-						description:"Cores to throttle frequency when temperature limit is reached."
-					}}
-					{ SCheckBox:{
-						label:"Core 0",
-						action:"intellithermal freq core0"
-					}},
-					{ SCheckBox:{
-						label:"Core 1",
-						action:"intellithermal freq core1"
-					}},
-					{ SCheckBox:{
-						label:"Core 2",
-						action:"intellithermal freq core2"
-					}},
-					{ SCheckBox:{
-						label:"Core 3",
-						action:"intellithermal freq core3"
-					}},'
-				fi
-				if [ -f "$MSMTHERMAL/parameters/core_control_mask" ]; then
-					$BB echo '{ SDescription:{
-						description:"Core Throttling Cores:"
-					}},
-					{ SDescription:{
-						description:"Cores to shutdown when temperature limit is reached."
-					}}
-					{ SCheckBox:{
-						label:"Core 1",
-						action:"intellithermal core core1"
-					}},
-					{ SCheckBox:{
-						label:"Core 2",
-						action:"intellithermal core core2"
-					}},
-					{ SCheckBox:{
-						label:"Core 3",
-						action:"intellithermal core core3"
-					}},'
-				fi
 				if [ -f "$MSMTHERMAL/parameters/core_temp_hysteresis_degC" ]; then
 				CTHG=\`$BB cat $MSMTHERMAL/parameters/core_temp_hysteresis_degC\`;
 					$BB echo '{ SSeekBar:{

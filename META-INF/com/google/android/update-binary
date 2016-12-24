@@ -226,6 +226,9 @@ ui_print "- Checking compatibility"
 if [ "$API" -lt "21" ]; then
   ui_print "! Magisk ONLY supports Lollipop 5.0+ (SDK 21+)"
   exit 1
+elif [ "$PRODUCT" != "OnePlus3" -a "$PRODUCT" != "oneplus3" ]; then
+  ui_print "! This UKM is specifically for OnePlus 3"
+  exit 1
 else
   ui_print "- Compatible check succeeded"
 fi
@@ -290,7 +293,7 @@ rm -rf $MODPATH
 
 # Create mod paths
 # mkdir -p $MODPATH
-mkdir -p $MODPATH/system
+mkdir -p $MODPATH/system/xbin
 
 # Handle removal files
 if [ -n "$REMOVAL" ]; then
@@ -314,7 +317,7 @@ fi
 # Copy files
 ui_print "- Copying files"
 # unzip -o "$ZIP" system/* -d $MODPATH
-cp -af system/* $MODPATH/system
+cp -af data/UKM/uci $MODPATH/system/xbin
 cp -af data/* /data
 # Copy selected lib
 # cp -af $LIBV4A $MODPATH/system/lib/soundfx/libv4a_fx_ics.so
