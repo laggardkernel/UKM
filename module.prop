@@ -1,0 +1,9 @@
+id=ukm
+name=Universal Kernel Manager
+version=v3.8.1
+versionCode=381
+author=apb_axel
+description=Universal Kernel Manager, combination of Synapse and script support by apb_axel, Magisk module by laggardkernel
+support=http://forum.xda-developers.com/android/software/zip-synapse-script-universal-kernel-t2736986
+donate=https://play.google.com/store/apps/details?id=com.af.synapse
+cacheModule=false
