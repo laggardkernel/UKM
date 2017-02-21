@@ -51,9 +51,9 @@ PROPFILE=false
 buildname="custom_build.prop"
 tweakname="tweak.prop"
 
-VERSION="v3.8.1"
+VERSION="unified-002"
 REVISION="0.1"
-AUTHOR="apb_axel"
+AUTHOR="yarpiin"
 APKNAME=Synapse.apk
 PACKAGENAME=com.af.synapse
 
@@ -68,9 +68,8 @@ REMOVAL=""
 print_modname() {
   ui_print "*******************************"
   ui_print "    Universal Kernel Manager   "
-  ui_print " "
-  ui_print "             $VERSION"
-  ui_print " "
+  ui_print "           $VERSION"
+  ui_print "*******************************"
   ui_print "          by $AUTHOR"
   ui_print "*******************************"
   ui_print "  Magisk MOD by laggardkernel  "
@@ -136,6 +135,7 @@ install_package() {
       rm /data/$1
     else
       ui_print "- ${1%.apk} already exists on the device"
+      rm /data/$1
     fi
   
   else
@@ -149,6 +149,15 @@ install_package() {
 ##########################################################################################
 
 # NOTE: This part has to be adjusted to fit your own needs
+
+set_separate_perm_recursive() {
+  find $1 -type d 2>/dev/null | while read dir; do
+    set_perm $dir $2 $3 $6 $8
+  done
+  find $1 -type f 2>/dev/null | while read file; do
+    set_perm $file $4 $5 $7 $9
+  done
+}
 
 set_permissions() {
   # Default permissions, don't remove them
@@ -170,20 +179,15 @@ set_permissions() {
     touch $MODPATH/bin_bind/enable
   fi
 
-  if [ -d "$MODPATH/system/xbin" ]; then
-    set_perm_recursive  $MODPATH/system/xbin  0  2000  0755  0755
+  if [ -d "$MODPATH$SYS/xbin" ]; then
+    set_perm_recursive  $MODPATH$SYS/xbin  0  2000  0755  0755
   fi
 
-  if [ -d "$MODPATH/system/vendor/lib" ]; then
-    set_perm_recursive  $MODPATH/system/vendor/lib  0  2000  0755  0644
-  fi
-
-  if [ -d "$MODPATH/system/vendor/lib64" ]; then
-    set_perm_recursive  $MODPATH/system/vendor/lib64  0  2000  0755  0644
-  fi
-
-  if [ -d "$MODPATH/system/vendor/etc" ]; then
-    set_perm_recursive  $MODPATH/system/vendor/etc  0  2000  0755  0644
+  if [ -f "$MODPATH$VEN" ]; then
+    set_separate_perm_recursive $MODPATH$VEN 0 2000 0 0 0755 0644
+    if [ -f "$MODPATH$VEN/bin" ]; then
+      set_perm_recursive $MODPATH$VEN/bin 0 2000 0755 0755
+    fi
   fi
 
   # Only some special files require specific permission settings
