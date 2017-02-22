@@ -1,5 +1,14 @@
 /
 P/oject name: UKM-unified
+
+https://forum.xda-developers.com/showpost.php?p=71133269&postcount=82
+UKM.UNI.003 oline:
+
+-Fixed Cpu frequency slider not working in some devices due to wrong path
+-added kcal on/off toggle 
+-removed leds control from misc
+-femoved spidbin from info
+
 19/02/2017
 
   * device: fix cpu temp status and remove Farenheits - we going to use Imperial only (Slawek) [b644623]
