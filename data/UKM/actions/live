@@ -27,20 +27,11 @@ case $1 in
 	GPUFrequency)
 		$BB echo `sh $DEVICE LiveGPUFrequency`;
 	;;
-	KRYOGPUFrequency)
-		$BB echo `sh $DEVICE LiveKRYOGPUFrequency`;
-	;;
 	CPUTemperature)
 		$BB echo `sh $DEVICE LiveCPUTemperature`;
 	;;
 	KRYOTemperature)
 		$BB echo `sh $DEVICE LiveKRYOCPUTemperature`;
-	;;
-	GPUFrequency)
-		$BB echo `sh $DEVICE LiveGPUFrequency`;
-	;;
-	KRYOGPUFrequency)
-		$BB echo `sh $DEVICE LiveKRYOGPUFrequency`;
 	;;
 	InstallationCheck)
 		$BB echo `if [ ! -f "/system/etc/init.d/UKM" ]; then $BB echo "UKM file missing in init.d"; elif [ ! -f "/system/addon.d/UKM.sh" ]; then $BB echo "UKM.sh file missing in addon.d"; else $BB echo "All checks OK"; fi`;
