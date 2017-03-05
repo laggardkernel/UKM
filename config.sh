@@ -51,7 +51,7 @@ PROPFILE=false
 buildname="custom_build.prop"
 tweakname="tweak.prop"
 
-VERSION="unified-004"
+VERSION="unified-005"
 REVISION="0.1"
 AUTHOR="yarpiin"
 APKNAME=Synapse.apk

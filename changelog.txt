@@ -1,9 +1,16 @@
 /
 P/oject name: UKM-unified
 
+02/03/2017 005
+
+- more gpu support
+- enabled sound tab for flars sound control
+- added adrenoboost tunables
+- cleaned it a bit 
+
 26/02/2017
 
- * misc: add various versions of powersuspend (Slawek) [9ccb750]
+  * misc: add various versions of powersuspend (Slawek) [9ccb750]
   * refresh: reduce refresh rate (Slawek) [cd6f73c]
   * live: remove doubled gpu rfequency (Slawek) [7c7bc15]
   * gpu: add more frequency scaling paths and merge kryo (Slawek) [e1b4106]
