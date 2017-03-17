@@ -500,10 +500,10 @@ case "$1" in
  	LiveCPU2Frequency)
 		LCPU=/sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq;
 		
-		CPU0=`$BB cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq 2> /dev/null`;
-		CPU1=`$BB cat /sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq 2> /dev/null`;
-		CPU2=`$BB cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq 2> /dev/null`;
-		CPU3=`$BB cat /sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq 2> /dev/null`;
+		CPU4=`$BB cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq 2> /dev/null`;
+		CPU5=`$BB cat /sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq 2> /dev/null`;
+		CPU6=`$BB cat /sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq 2> /dev/null`;
+		CPU7=`$BB cat /sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq 2> /dev/null`;
 		
 		if [ -z "$CPU4" ]; then CPU4="Offline"; else CPU4="$((CPU4 / 1000)) MHz"; fi;
 		if [ -z "$CPU5" ]; then CPU5="Offline"; else CPU5="$((CPU5 / 1000)) MHz"; fi;
@@ -954,10 +954,13 @@ case "$1" in
 		$BB echo $WL;
 	;;
 	MaxCPU)
-		$BB echo "4";
-	;;
-	MaxCPU1)
-		$BB echo "8";
+		MAXCPU=/sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq;
+		
+		if [ -f "$MAXCPU" ]; then
+			$BB echo "8"
+		else
+			$BB echo "4"
+		fi;
 	;;
 	MinFreqIndex)
 		ID=0;

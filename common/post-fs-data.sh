@@ -115,7 +115,7 @@ $BB echo "0" > $UKM/files/volt_prof;
 $BB echo "0" > $UKM/files/dropcaches_prof;
 
 # Reset uci config so it can be re-created on boot.
-log_print "Restart uic"
+log_print "Restart uci"
 $UCI_XBIN reset;
 $BB sleep 1;
 $UCI_XBIN;
