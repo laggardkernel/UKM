@@ -4,11 +4,15 @@
 MODDIR=${0%/*}
 LOGFILE=/cache/magisk.log
 MODNAME=${MODDIR#/magisk/}
+MOUNTPOINT=/magisk
+COREDIR=$MOUNTPOINT/.core
 
-MODE="post-fs-data"
-APKNAME=Synapse.apk
-PACKAGENAME=com.af.synapse
-REBOOT=false
+SEPOLICY="/data/magisk/sepolicy-inject"
+if [ -f $COREDIR/bin/magiskpolicy ]; then
+  SEPOLICY="$COREDIR/bin/magiskpolicy"
+elif [ -f /data/magisk/magiskpolicy ]; then
+  SEPOLICY="/data/magisk/magiskpolicy"
+fi
 
 # Use the included busybox for maximum compatibility and reliable results
 # e.g. we rely on the option "-c" for cp (reserve contexts), and -exec for find
@@ -37,56 +41,13 @@ log_print() {
 bind_mount() {
   if [ -e "$1" -a -e "$2" ]; then
     mount -o bind $1 $2
-    if [ "$?" -eq "0" ]; then 
+    if [ "$?" -eq "0" ]; then
       log_print "Mount: $1"
-    else 
+    else
       log_print "Mount Fail: $1"
-    fi 
+    fi
   fi
 }
-
-# Install Android package $APKNAME
-if [ -f "/cache/$APKNAME" ]; then
-  cp /cache/$APKNAME /data/$APKNAME
-  rm /cache/$APKNAME
-fi
-
-if [ -f "/data/$APKNAME" ]; then
-  log_print "installing $APKNAME in /data"
-  APKPATH="$PACKAGENAME"-1
-  for i in `ls /data/app | grep "$PACKAGENAME"-`; do
-    if [ `cat /data/system/packages.xml | grep $i >/dev/null 2>&1; echo $?` -eq 0 ]; then
-      APKPATH=$i
-      break;
-    fi
-  done
-  rm -rf /data/app/"$PACKAGENAME"-*
-  log_print "target path: /data/app/$APKPATH"
-  mkdir /data/app/$APKPATH
-  chown 1000.1000 /data/app/$APKPATH
-  chmod 0755 /data/app/$APKPATH
-  chcon u:object_r:apk_data_file:s0 /data/app/$APKPATH
-  cp /data/$APKNAME /data/app/$APKPATH/base.apk
-  chown 1000.1000 /data/app/$APKPATH/base.apk
-  chmod 0644 /data/app/$APKPATH/base.apk
-  chcon u:object_r:apk_data_file:s0 /data/app/$APKPATH/base.apk
-  rm /data/$APKNAME
-  sync
-  # just in case
-  REBOOT=true
-fi
-
-# sometimes we need to reboot, make it so
-if ($REBOOT); then
-  log_print "rebooting"
-  if [ "$MODE" = "post-fs-data" ]; then
-    # avoid device freeze (reason unknown)
-    sh -c "sleep 5; reboot" &
-  else
-    reboot
-  fi
-  exit
-fi
 
 # **************************************************************
 # Add Synapse support
@@ -115,9 +76,20 @@ $BB echo "0" > $UKM/files/volt_prof;
 $BB echo "0" > $UKM/files/dropcaches_prof;
 
 # Reset uci config so it can be re-created on boot.
-log_print "Restart uci"
+log_print "restart uci"
 $UCI_XBIN reset;
 $BB sleep 1;
 $UCI_XBIN;
-log_print "Set SELinux permissive"
-setenforce 0
+
+# if [ -d "${MODDIR}/system/priv-app/Ax" ] || [ -d "${MODDIR}/system/priv-app/AxUI" ]; then
+   log_print "set SELinux permissive"
+   setenforce 0
+# else
+#   log_print "sepolicy live patch"
+#   # For Magisk v9
+#   # $SEPOLICY --live -s mediaserver -t mediaserver_tmpfs -c file -p read,write,execute
+#   # $SEPOLICY --live -s audioserver -t audioserver_tmpfs -c file -p read,write,execute
+#   # Preparation for Magisk v11+ with the new MagiskSU and its sepolicy
+#   $SEPOLICY --live "allow mediaserver mediaserver_tmpfs file { read write execute }" \
+#   "allow audioserver audioserver_tmpfs file { read write execute }"
+# fi

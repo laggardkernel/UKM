@@ -2,27 +2,27 @@
 #
 # Magisk
 # by topjohnwu
-# 
+#
 # This is a template zip for developers
 #
 ##########################################################################################
 ##########################################################################################
-# 
+#
 # Instructions:
-# 
+#
 # 1. Place your files into system folder
 # 2. Fill in all sections in this file
 # 3. For advanced features, add commands into the script files under common:
 #    post-fs.sh, post-fs-data.sh, service.sh
 # 4. Change the "module.prop" under common with the info of your module
-# 
+#
 ##########################################################################################
 ##########################################################################################
-# 
+#
 # Limitations:
 # 1. Can not place any new items under /system root!! e.g. /system/newfile, /system/newdir
 #    Magisk will delete these items at boot.
-# 
+#
 ##########################################################################################
 
 ##########################################################################################
@@ -51,13 +51,13 @@ PROPFILE=false
 buildname="custom_build.prop"
 tweakname="tweak.prop"
 
-VERSION="unified-006"
+VERSION="unified-007"
 REVISION="0.1"
 AUTHOR="yarpiin"
 APKNAME=Synapse.apk
 PACKAGENAME=com.af.synapse
 
-REMOVAL=""
+REMOVAL=
 
 ##########################################################################################
 # Installation Message
@@ -96,97 +96,40 @@ REPLACE="
 "
 
 ##########################################################################################
-# Package installation
-##########################################################################################
-
-install_package() {
-  # Install Android package $APKNAME $PACKAGENAME
-  if [ -d "$MODPATH/system/app/${1%.apk}" ]; then
-    ui_print "- Installing ${1%.apk} as system app"
-    rm -rf /data/app/${2}-*
-    rm -rf /data/data/${2}
-  
-  elif [ -d "$MODPATH/system/priv-app/${1%.apk}" ]; then
-    ui_print "- Installing ${1%.apk} as system priv-app"
-    rm -rf /data/app/${2}-*
-    rm -rf /data/data/${2}
-  
-  elif [ -f "$INSTALLER/$1" ]; then
-    if [ -z `ls /data/app | grep "$2"-` ]; then
-      ui_print "- Installing ${1%.apk} as data app"
-      cp -af $INSTALLER/$1 /data/$1
-      APKPATH="$2"-1
-      for i in `ls /data/app | grep "$2"-`; do
-        if [ `cat /data/system/packages.xml | grep $i >/dev/null 2>&1; echo $?` -eq 0 ]; then
-          APKPATH=$i
-          break;
-        fi
-      done
-      rm -rf /data/app/"$2"-*
-      ui_print "  target path: /data/app/$APKPATH"
-      mkdir /data/app/$APKPATH
-      chown 1000.1000 /data/app/$APKPATH
-      chmod 0755 /data/app/$APKPATH
-      chcon u:object_r:apk_data_file:s0 /data/app/$APKPATH
-      cp /data/$1 /data/app/$APKPATH/base.apk
-      chown 1000.1000 /data/app/$APKPATH/base.apk
-      chmod 0644 /data/app/$APKPATH/base.apk
-      chcon u:object_r:apk_data_file:s0 /data/app/$APKPATH/base.apk
-      rm /data/$1
-    else
-      ui_print "- ${1%.apk} already exists on the device"
-      rm /data/$1
-    fi
-  
-  else
-    ui_print "- ${1%.apk} is not included, install it later by yourself"
-    
-  fi
-}
-
-##########################################################################################
 # Permissons
 ##########################################################################################
 
 # NOTE: This part has to be adjusted to fit your own needs
 
-set_separate_perm_recursive() {
-  find $1 -type d 2>/dev/null | while read dir; do
-    set_perm $dir $2 $3 $6 $8
-  done
-  find $1 -type f 2>/dev/null | while read file; do
-    set_perm $file $4 $5 $7 $9
-  done
-}
+# NOTE: This part has to be adjusted to fit your own needs
 
 set_permissions() {
   # Default permissions, don't remove them
   set_perm_recursive  $MODPATH  0  0  0755  0644
-
   set_perm_recursive  /data/UKM  0  0  0755  0755
 
-  # if [ -d "$MODPATH/system/bin" ]; then
-  #   set_perm_recursive  $MODPATH/system/bin  0  2000  0755  0755
-  # fi
+  if [ -d "$MODPATH$SYS/bin" ]; then
+    set_perm_recursive  $MODPATH/system/bin  0  2000  0755  0755
+  fi
 
   # bin_mount binaries to /system/bin is broken, do it manually
-  if [ -d "$MODPATH/system/bin" ]; then
-    ui_print "- Changing bin binaries mount method as manual"
-    mv -f "$MODPATH/system/bin" "$MODPATH/bin"
-    set_perm_recursive  $MODPATH/bin  0  2000  0755  0755
-    # Touch an empty "enable" file as switch
-    mkdir -p $MODPATH/bin_bind
-    touch $MODPATH/bin_bind/enable
-  fi
+  # if [ -d "$MODPATH/system/bin" ]; then
+  #   ui_print "- Changing bin binaries mount method as manual"
+  #   mv -f "$MODPATH/system/bin" "$MODPATH/bin"
+  #   set_perm_recursive  $MODPATH/bin  0  2000  0755  0755
+  #   # Touch an empty "enable" file as switch
+  #   mkdir -p $MODPATH/bin_bind
+  #   touch $MODPATH/bin_bind/enable
+  # fi
 
   if [ -d "$MODPATH$SYS/xbin" ]; then
     set_perm_recursive  $MODPATH$SYS/xbin  0  2000  0755  0755
   fi
 
-  if [ -f "$MODPATH$VEN" ]; then
-    set_separate_perm_recursive $MODPATH$VEN 0 2000 0 0 0755 0644
-    if [ -f "$MODPATH$VEN/bin" ]; then
-      set_perm_recursive $MODPATH$VEN/bin 0 2000 0755 0755
+  if [ -f "$MODPATH$SYS/vendor" ]; then
+    set_separate_perm_recursive $MODPATH$SYS/vendor 0 2000 0 0 0755 0644
+    if [ -f "$MODPATH$SYS/vendor/bin" ]; then
+      set_perm_recursive $MODPATH$SYS/vendor/bin 0 2000 0755 0755
     fi
   fi
 
